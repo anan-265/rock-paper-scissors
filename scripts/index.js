@@ -87,6 +87,9 @@ scissorsButton.addEventListener("click", function() {
 resetButton.addEventListener("click", function() {
     userScore = 0;
     computerScore = 0;
+    rockButton.disabled = false;
+    paperButton.disabled = false;
+    scissorsButton.disabled = false;
     updateScores({ reason: "Game reset. Let's start a new game!", userScore, computerScore });
 });
 
@@ -112,12 +115,18 @@ function updateScores(result) {
         announcementDiv.style.color = "green";
         userScore = 0;
         computerScore = 0;
+        rockButton.disabled = true;
+        paperButton.disabled = true;
+        scissorsButton.disabled = true;
     } else if (result.computerScore === 5) {
         computerScoreCell.style.color = "green";
         userScore = 0;
         computerScore = 0;
         announcementDiv.textContent = "Sorry, you lost the game. The computer reached 5 points first.";
         announcementDiv.style.color = "red";
+        rockButton.disabled = true;
+        paperButton.disabled = true;
+        scissorsButton.disabled = true;
     } else if (result.userScore < 5 && result.computerScore < 5) {
         userScoreCell.style.color = "black";
         computerScoreCell.style.color = "black";
