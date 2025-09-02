@@ -54,26 +54,74 @@ function playRound(userChoice, computerChoice) {
         reason = "You lose! Scissors beats Paper";
     }
     console.log(reason);
-    alert(reason);
     console.log(`Score: User - ${userScore}, Computer - ${computerScore}`);
-    return { userScore, computerScore };
+    return { reason, userScore, computerScore };
 }
 
-//Function of the entire game
-function playGame() {
-    for (let i = 0; i < 5; i++) {
-        let result = playRound(getHumanChoice(), getComputerChoice());
-        userScore = result.userScore;
-        computerScore = result.computerScore;
-    }
-    console.log(`Final Score: User - ${userScore}, Computer - ${computerScore}`);
-    if (userScore > computerScore) {
-        alert(`Congratulations! You win the game!. Score board: ${userScore} - ${computerScore}`);
-    } else if (userScore < computerScore) {
-        alert(`Sorry! You lose the game. Score board: ${userScore} - ${computerScore}`);
-    } else {
-        alert(`It's a tie! Score board: ${userScore} - ${computerScore}`);
-    }
-}
+rockButton = document.querySelector("#rock");
+paperButton = document.querySelector("#paper");
+scissorsButton = document.querySelector("#scissors");
+resetButton = document.querySelector("#reset");
 
-playGame();
+rockButton.addEventListener("click", function() {
+    let computerChoice = getComputerChoice();
+    let result = playRound("rock", computerChoice);
+    updateScores(result);
+}
+);
+
+paperButton.addEventListener("click", function() {
+    let computerChoice = getComputerChoice();
+    let result = playRound("paper", computerChoice);
+    updateScores(result);
+}
+);
+
+scissorsButton.addEventListener("click", function() {
+    let computerChoice = getComputerChoice();
+    let result = playRound("scissors", computerChoice);
+    updateScores(result);
+}
+);
+
+resetButton.addEventListener("click", function() {
+    userScore = 0;
+    computerScore = 0;
+    updateScores({ reason: "Game reset. Let's start a new game!", userScore, computerScore });
+});
+
+scoreTable = document.querySelector("table");
+userScoreCell = document.querySelector("#player-score");
+computerScoreCell = document.querySelector("#computer-score");
+announcementDiv = document.querySelector(".announcement");
+
+function updateScores(result) {
+    userScoreCell.textContent = result.userScore;
+    computerScoreCell.textContent = result.computerScore;
+    announcementDiv.textContent = result.reason;
+
+    if (scoreTable.classList.contains("hidden")) {
+        scoreTable.classList.remove("hidden");
+    }
+
+
+
+    if (result.userScore === 5) {
+        userScoreCell.style.color = "green";
+        announcementDiv.textContent = "Congratulations! You reached 5 points first and won the game!";
+        announcementDiv.style.color = "green";
+        userScore = 0;
+        computerScore = 0;
+    } else if (result.computerScore === 5) {
+        computerScoreCell.style.color = "green";
+        userScore = 0;
+        computerScore = 0;
+        announcementDiv.textContent = "Sorry, you lost the game. The computer reached 5 points first.";
+        announcementDiv.style.color = "red";
+    } else if (result.userScore < 5 && result.computerScore < 5) {
+        userScoreCell.style.color = "black";
+        computerScoreCell.style.color = "black";
+        announcementDiv.style.color = "black";
+    }
+};
+
